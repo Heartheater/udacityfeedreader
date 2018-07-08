@@ -16,10 +16,7 @@ $(function() {
     describe('RSS Feeds', function() {
         /* This is our first test - it tests to make sure that the
          * allFeeds variable has been defined and that it is not
-         * empty. Experiment with this before you get started on
-         * the rest of this project. What happens when you change
-         * allFeeds in app.js to be an empty array and refresh the
-         * page?
+         * empty. 
          */
         it('are defined', function() {
             expect(allFeeds).toBeDefined();
@@ -33,7 +30,6 @@ $(function() {
             });
         });
 
-
         /* loops through each feed in the allFeeds object
          * and ensures it has a name defined
          */
@@ -46,9 +42,8 @@ $(function() {
 
     });
 
-
+    
     describe('The Menu', function () {
-
         //checks that menu is hidden by default
         it('is hidden by default', function () {
             let menu = document.querySelector('body');
@@ -65,10 +60,8 @@ $(function() {
         });
 
     });
-    /* TODO: Write a new test suite named "Initial Entries" */
 
     describe('Initial Entries', function () {
-
         beforeEach(function (done) {
             loadFeed(0, function () {
                 done();
@@ -76,45 +69,31 @@ $(function() {
         });
 
         it('has at least a single entry', function () {
-            let allEntries = document.getElementsByClassName('entry-link');
+            let allEntries = document.querySelectorAll('.feed .entry');
             expect(allEntries.length).not.toBe(0);
         });
-
     });
 
-    /* TODO: Write a new test suite named "New Feed Selection" */
+
     describe('New Feed Selection', function () {
-        let feedTitles,
-            previousFeeds = [],
+        let previousFeeds = [],
             newFeeds = [];
 
-        //load first feed
         beforeEach(function (done) {
-            loadFeed(0, function () {
-                done();
-            });
-            feedTitles = document.querySelectorAll('.entry');
-            feedTitles.forEach(function (entry) {
-                previousFeeds.push(entry.innerText);
-            });
-        });
-
-        //load second feed
-        beforeEach(function (done) {
+            //get first feed
             loadFeed(1, function () {
-                done();
+                previousFeeds = $('.entry').html();
+                //get second feed
+                loadFeed(0, function () {
+                    newFeeds = $('.entry').html();
+                    done();
+                });
             });
         });
 
-        //check if feeds are different
+        //check if the feeds are different
         it('loads new feeds', function () {
-            feedTitles = document.querySelectorAll('.entry');
-            feedTitles.forEach(function (entry) {
-                newFeeds.push(entry.innerText);
-            });
-            for (let index = 0; index < newFeeds.length; ++index) {
-                expect(previousFeeds[index]).not.toBe(newFeeds[index]);
-            }
+            expect(previousFeeds).not.toEqual(newFeeds);
         });
     });
 }());
